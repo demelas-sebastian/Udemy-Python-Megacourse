@@ -1,5 +1,7 @@
 from tkinter import *
-import backend as bk
+from backend import Database
+
+db=Database('boooks.db')
 
 def get_selected_row(event):
     global selected_tuple
@@ -19,29 +21,29 @@ def get_selected_row(event):
 
 def view_command():
     box.delete(0,END)
-    for row in bk.view():
+    for row in db.view():
         box.insert(END,row)
 
 def search_command():
     box.delete(0,END)
-    for row in bk.search(title_text.get(),author_text.get(),year_text.get(),isbn_text.get()):
+    for row in db.search(title_text.get(),author_text.get(),year_text.get(),isbn_text.get()):
         box.insert(END,row)
 
 def add_command():
-    bk.insert(title_text.get(),author_text.get(),year_text.get(),isbn_text.get())
+    db.insert(title_text.get(),author_text.get(),year_text.get(),isbn_text.get())
     box.delete(0,END)
     box.insert(END,(title_text.get(),author_text.get(),year_text.get(),isbn_text.get()))
 
 def update_command():
-    bk.update(selected_tuple[0],e_title.get(),e_author.get(),e_year.get(),e_isbn.get())
+    db.update(selected_tuple[0],e_title.get(),e_author.get(),e_year.get(),e_isbn.get())
     box.delete(0,END)
-    for row in bk.view():
+    for row in db.view():
         box.insert(END,row)
 
 def delete_command():
-    bk.delete(selected_tuple[0])
+    db.delete(selected_tuple[0])
     box.delete(0,END)
-    for row in bk.view():
+    for row in db.view():
         box.insert(END,row)
 
 window=Tk()
@@ -85,7 +87,7 @@ b_search=Button(window,text='Search entry',command=search_command,width=12)
 b_add=Button(window,text='Add entry',command=add_command,width=12)
 b_update=Button(window,text='Update',command=update_command,width=12)
 b_delete=Button(window,text='Delete',command=delete_command,width=12)
-b_close=Button(window,text='Close',command=lambda x=window:bk.close(x),width=12)
+b_close=Button(window,text='Close',command=lambda x=window:db.close(x),width=12)
 b_view.grid(row=2,column=3)
 b_search.grid(row=3,column=3)
 b_add.grid(row=4,column=3)
